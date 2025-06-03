@@ -43,28 +43,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->outputText->setReadOnly(true);
 
     loadPorts();
-    keyfilePath = "";
+    keyFilePath = "";
     filePath = "";
-    FilePath_APP = "";
-    FilePath_BOOT = "";
-    testAddress_APP = "0xf000";
-    testAddress_BOOT = "0x1000";
+    filePathApp = "";
+    filePathBoot = "";
+    addressApp = "0xf000";
+    addressBoot = "0x1000";
 
-    connect(ui->Erase_Button, &QPushButton::clicked,
-            this, &MainWindow::erase_flash);
+    connect(ui->eraseBtn, &QPushButton::clicked,
+            this, &MainWindow::eraseFlash);
     connect(ui->reloadBtn, &QPushButton::clicked,
             this, &MainWindow::loadPorts);
-    connect(ui->browseBtn, &QPushButton::clicked,
+    connect(ui->browseBoot, &QPushButton::clicked,
             this, &MainWindow::browseBootFile);
 
-    connect(ui->browseBinFile, &QPushButton::clicked,
+    connect(ui->browseApp, &QPushButton::clicked,
             this, &MainWindow::browseAppFile);
-    connect(ui->browseKeyFile, &QPushButton::clicked,
+    connect(ui->browseKeyBtn, &QPushButton::clicked,
             this, &MainWindow::browseKeyFile);
-    connect(ui->Burn_BOOT_Btn, &QPushButton::clicked,
-            this, &MainWindow::Burn_BOOT);
-    connect(ui->Burn_APP_Btn, &QPushButton::clicked,
-            this, &MainWindow::Burn_APP);
+    connect(ui->burnBootBtn, &QPushButton::clicked,
+            this, &MainWindow::burnBoot);
+    connect(ui->burnAppBtn, &QPushButton::clicked,
+            this, &MainWindow::burnApp);
 
     // Serial port setup
     connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
@@ -76,27 +76,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
             this, &MainWindow::openSerialPort);
     connect(ui->closeSerialBtn, &QPushButton::clicked,
             this, &MainWindow::closeSerialPort);
-    connect(ui->ButtonGetDefMac, &QPushButton::clicked,
-            this, &MainWindow::doGetDefMac);
-    connect(ui->ButtonGetCusMac, &QPushButton::clicked,
-            this, &MainWindow::doGetCusMac);
-    connect(ui->ConfirmBurnMac, &QPushButton::clicked,
-            this, &MainWindow::Burn_Mac);
-    connect(ui->ConfirmBurnKey, &QPushButton::clicked,
-            this, &MainWindow::Burn_flash_Key);
-    connect(ui->ConfirmBurnblock, &QPushButton::clicked,
-            this, &MainWindow::Burn_flash_Block);
-    connect(ui->ConfirmBurnAll, &QPushButton::clicked,
-            this, &MainWindow::Burn_All);
+    connect(ui->getDefaultMacBtn, &QPushButton::clicked,
+            this, &MainWindow::getDefaultMac);
+    connect(ui->getCustomMacBtn, &QPushButton::clicked,
+            this, &MainWindow::getCustomMac);
+    connect(ui->burnMacBtn, &QPushButton::clicked,
+            this, &MainWindow::burnMac);
+    connect(ui->burnKeyBtn, &QPushButton::clicked,
+            this, &MainWindow::burnFlashKey);
+    connect(ui->burnBlockBtn, &QPushButton::clicked,
+            this, &MainWindow::burnFlashBlock);
+    connect(ui->burnAllBtn, &QPushButton::clicked,
+            this, &MainWindow::burnAll);
 
-    //    connect(ui->Button_reset, &QPushButton::clicked,
-    //            this, &MainWindow::Reset_Board);
-    connect(ui->RTSCheckBox, &QCheckBox::stateChanged, [=](int state)
-            {
-        if(!serial->isOpen()) return ;
-        if((Qt::CheckState)state == Qt::Checked) setRTS(true);
-        else if((Qt::CheckState)state == Qt::Unchecked) setRTS(false); });
-    connect(ui->Button_reset, &QPushButton::clicked, this, [=]()
+    //    connect(ui->resetBtn, &QPushButton::clicked,
+    //            this, &MainWindow::resetBoard);
+    // connect(ui->RTSCheckBox, &QCheckBox::stateChanged, [=](int state)
+    //         {
+    //     if(!serial->isOpen()) return ;
+    //     if((Qt::CheckState)state == Qt::Checked) setRTS(true);
+    //     else if((Qt::CheckState)state == Qt::Unchecked) setRTS(false); });
+    connect(ui->resetBtn, &QPushButton::clicked, this, [=]()
             {
             setDTR(false);
             setRTS(true);
@@ -107,8 +107,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     QCoreApplication::setOrganizationDomain("makerlab.mx");
     QCoreApplication::setApplicationName("Huafuu_Tool");
     QSettings settings;
-    ui->testAddess_APP->setText(testAddress_APP);
-    ui->testAddess_BOOT->setText(testAddress_BOOT);
+    ui->appAddress->setText(addressApp);
+    ui->bootAddress->setText(addressBoot);
     if (settings.contains("settings/port"))
     {
         int portIndex = settings.value("settings/port").toInt();
@@ -123,20 +123,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     if (settings.contains("settings/keyfile"))
     {
-        keyfilePath = settings.value("settings/keyfile").toString();
-        ui->keyBinPath->setText(keyfilePath);
+        keyFilePath = settings.value("settings/keyfile").toString();
+        ui->keyFilePath->setText(keyFilePath);
     }
     if (settings.contains("settings/testFile_APP"))
     {
-        FilePath_APP = settings.value("settings/testFile_APP").toString();
-        ui->File_Path_APP->setText(FilePath_APP);
+        filePathApp = settings.value("settings/testFile_APP").toString();
+        ui->appFilePath->setText(filePathApp);
     }
     if (settings.contains("settings/testFile_BOOT"))
     {
-        FilePath_BOOT = settings.value("settings/testFile_BOOT").toString();
-        ui->File_Path_BOOT->setText(FilePath_BOOT);
+        filePathBoot = settings.value("settings/testFile_BOOT").toString();
+        ui->bootFilePath->setText(filePathBoot);
     }
-    ui->SetMacBox->setText("00:00:00:00:00:01");
+    ui->setMacEdit->setText("00:00:00:00:00:01");
     connect(ui->portBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             [=](int index)
             {
@@ -173,9 +173,9 @@ void MainWindow::browseBootFile()
     const QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
     {
-        FilePath_BOOT = fileName;
-        ui->File_Path_BOOT->setText(FilePath_BOOT);
-        settings.setValue("settings/testFile_BOOT", FilePath_BOOT);
+        filePathBoot = fileName;
+        ui->bootFilePath->setText(filePathBoot);
+        settings.setValue("settings/testFile_BOOT", filePathBoot);
     }
 }
 
@@ -185,9 +185,9 @@ void MainWindow::browseKeyFile()
     const QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
     {
-        keyfilePath = fileName;
-        ui->keyBinPath->setText(keyfilePath);
-        settings.setValue("settings/keyfile", keyfilePath);
+        keyFilePath = fileName;
+        ui->keyFilePath->setText(keyFilePath);
+        settings.setValue("settings/keyfile", keyFilePath);
     }
 }
 void MainWindow::browseAppFile()
@@ -196,9 +196,9 @@ void MainWindow::browseAppFile()
     const QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
     {
-        FilePath_APP = fileName;
-        ui->File_Path_APP->setText(FilePath_APP);
-        settings.setValue("settings/testFile_APP", FilePath_APP);
+        filePathApp = fileName;
+        ui->appFilePath->setText(filePathApp);
+        settings.setValue("settings/testFile_APP", filePathApp);
     }
 }
 void MainWindow::setDTR(bool state)
@@ -212,7 +212,8 @@ void MainWindow::setRTS(bool state)
     if (serial->isOpen())
         serial->setRequestToSend(state);
 }
-void MainWindow::erase_flash()
+// 将 void MainWindow::erase_flash() 修改为
+void MainWindow::eraseFlash()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -273,7 +274,8 @@ void MainWindow::erase_flash()
 
     process->start(program, arguments);
 }
-void MainWindow::Burn_BOOT()
+// 将 void MainWindow::Burn_BOOT() 修改为
+void MainWindow::burnBoot()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -291,7 +293,8 @@ void MainWindow::Burn_BOOT()
               << ui->portBox->currentText()
               << "--after"
               << "no_reset"
-              << "write_flash" << ui->testAddess_BOOT->text() << FilePath_BOOT;
+              << "--no-stub"
+              << "write_flash" << ui->bootAddress->text() << filePathBoot;
 
     qDebug() << "arguments =" << arguments;
     // startProcess(program, arguments, true);
@@ -342,7 +345,7 @@ void MainWindow::Burn_BOOT()
     process->start(program, arguments);
 }
 
-void MainWindow::doGetDefMac()
+void MainWindow::getDefaultMac()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -382,6 +385,10 @@ void MainWindow::doGetDefMac()
         }
         else
         {
+                // 添加成功提示
+                ui->outputText->appendPlainText("获取成功");
+                QMessageBox::information(NULL, "提示", "获取成功！", QMessageBox::Ok, QMessageBox::Ok);
+                
                 QString data = ui->outputText->toPlainText();
                 qDebug() << "data =" << data;
                 QString Frame_header = "\nMAC: ";   // 查找的字符串
@@ -389,7 +396,7 @@ void MainWindow::doGetDefMac()
                 qDebug() << "a =" << a;
 
                 QString test = data.mid(a + 6, 17); // 按字节数，截取结果为"5555aaaa000000000"
-                ui->GetMacBox->setText(test);
+                ui->defaultMacEdit->setText(test);
 
                 setInputsDisabled(false); } });
 
@@ -401,7 +408,7 @@ void MainWindow::doGetDefMac()
     process->start(program, arguments);
 }
 
-void MainWindow::doGetCusMac()
+void MainWindow::getCustomMac()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -446,7 +453,7 @@ void MainWindow::doGetCusMac()
             int a = data.indexOf(Frame_header);            // 查找第一个，返回值
             qDebug() << "a =" << a;
             QString test = data.mid(a + 20, 17); // 按字节数，截取结果
-            ui->GetMacBox_2->setText(test);
+            ui->customMacEdit->setText(test);
 
             setInputsDisabled(false);
         } });
@@ -458,7 +465,7 @@ void MainWindow::doGetCusMac()
 
     process->start(program, arguments);
 }
-void MainWindow::Burn_flash_Key()
+void MainWindow::burnFlashKey()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -467,7 +474,7 @@ void MainWindow::Burn_flash_Key()
     QStringList arguments;
     arguments << "-p" << ui->portBox->currentText()
               << "burn_key"
-              << "BLOCK_KEY1" << ui->keyBinPath->text() << "XTS_AES_128_KEY";
+              << "BLOCK_KEY1" << ui->keyFilePath->text() << "XTS_AES_128_KEY";
     process = new QProcess(this);
 
     connect(process, &QProcess::started, this, [=]()
@@ -512,9 +519,9 @@ void MainWindow::Burn_flash_Key()
     //
     process->write("BURN\n");
     process->waitForFinished();
-    Burn_flash_Block();
+    burnFlashBlock();
 }
-void MainWindow::Burn_All()
+void MainWindow::burnAll()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -523,7 +530,7 @@ void MainWindow::Burn_All()
     QStringList arguments;
     arguments << "-p" << ui->portBox->currentText()
               << "burn_key"
-              << "BLOCK_KEY1" << ui->keyBinPath->text() << "XTS_AES_128_KEY";
+              << "BLOCK_KEY1" << ui->keyFilePath->text() << "XTS_AES_128_KEY";
     //    startProcess(program, arguments);
     process = new QProcess(this);
 
@@ -569,11 +576,11 @@ void MainWindow::Burn_All()
     //
     process->write("BURN\n");
     process->waitForFinished();
-    Burn_flash_Block();
+    burnFlashBlock();
 
-    Burn_BOOT();
+    burnBoot();
 }
-void MainWindow::Burn_flash_Block()
+void MainWindow::burnFlashBlock()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -648,7 +655,7 @@ void MainWindow::Burn_flash_Block()
     process->waitForFinished();
 }
 
-void MainWindow::Burn_Mac()
+void MainWindow::burnMac()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -659,7 +666,7 @@ void MainWindow::Burn_Mac()
     //    arguments  << "-p" << ui->portBox->currentText()
     //              << "burn_key"<< "BLOCK_KEY1"<< "key.bin"<< "XTS_AES_128_KEY";
     arguments << "-p" << ui->portBox->currentText()
-              << "burn_custom_mac" << ui->SetMacBox->text();
+              << "burn_custom_mac" << ui->setMacEdit->text();
 
     //    startProcess(program, arguments);
     process = new QProcess(this);
@@ -705,7 +712,7 @@ void MainWindow::Burn_Mac()
     // process->waitForFinished();
     process->write("BURN\n");
 }
-void MainWindow::Reset_Board()
+void MainWindow::resetBoard()
 {
     // closeSerialPort();
     ui->outputText->clear();
@@ -719,7 +726,7 @@ void MainWindow::Reset_Board()
 
     // openSerialPort();
 }
-void MainWindow::Burn_APP()
+void MainWindow::burnApp()
 {
     closeSerialPort();
     ui->outputText->clear();
@@ -738,7 +745,8 @@ void MainWindow::Burn_APP()
               << "default_reset"
               << "--after"
               << "no_reset"
-              << "write_flash" << ui->testAddess_APP->text() << FilePath_APP;
+              << "--no-stub"
+              << "write_flash" << ui->appAddress->text() << filePathApp;
 
     qDebug() << "arguments =" << arguments;
     // startProcess(program, arguments, 4);
@@ -791,14 +799,14 @@ void MainWindow::Burn_APP()
 
 void MainWindow::setInputsDisabled(bool disabled)
 {
-    ui->Erase_Button->setDisabled(disabled);
+    ui->eraseBtn->setDisabled(disabled);
     ui->baudBox->setDisabled(disabled);
     ui->portBox->setDisabled(disabled);
     ui->reloadBtn->setDisabled(disabled);
-    ui->Burn_BOOT_Btn->setDisabled(disabled);
-    ui->browseBtn->setDisabled(disabled);
-    ui->browseBinFile->setDisabled(disabled);
-    ui->Burn_APP_Btn->setDisabled(disabled);
+    ui->burnBootBtn->setDisabled(disabled);
+    ui->browseBoot->setDisabled(disabled);
+    ui->browseApp->setDisabled(disabled);
+    ui->burnAppBtn->setDisabled(disabled);
 }
 
 void MainWindow::startProcess(QString program, QStringList arguments, uint8_t isTest)

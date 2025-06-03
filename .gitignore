@@ -4,7 +4,7 @@
 *.slo
 *.lo
 *.o
-
+*.vscode
 # Compiled Dynamic libraries
 *.so
 *.dylib

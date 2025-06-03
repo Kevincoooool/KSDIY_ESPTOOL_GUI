@@ -6,477 +6,477 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>787</width>
-    <height>509</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>KSDIY_ESPTOOL_GUI</string>
+   <string>ESP工具</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/icons/app_icon.png</normaloff>:/icons/app_icon.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox {
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px 0 5px;
+}
+QPushButton {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 15px;
+}
+QPushButton:hover {
+    background-color: #1e88e5;
+}
+QPushButton:pressed {
+    background-color: #005a9e;
+}
+QPushButton:disabled {
+    background-color: #cccccc;
+    color: #666666;
+}
+QLineEdit {
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 3px;
+}
+QComboBox {
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 3px;
+}
+QPlainTextEdit {
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <widget class="QGroupBox" name="settingsBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>411</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>设置</string>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="5" column="9">
-      <widget class="QPushButton" name="Burn_BOOT_Btn">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>4.烧录BOOT</string>
-       </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="topWidget">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QGroupBox" name="connectionBox">
+          <property name="title">
+           <string>连接设置</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="portLabel">
+             <property name="text">
+              <string>端口：</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="portBox"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="reloadBtn">
+             <property name="text">
+              <string>刷新</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/icons/refresh.png</normaloff>:/icons/refresh.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="baudLabel">
+             <property name="text">
+              <string>波特率：</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="baudBox"/>
+           </item>
+           <item row="2" column="0" colspan="3">
+            <layout class="QHBoxLayout" name="serialControlLayout">
+             <item>
+              <widget class="QPushButton" name="openSerialBtn">
+               <property name="text">
+                <string>打开串口</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>:/icons/connect.png</normaloff>:/icons/connect.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="closeSerialBtn">
+               <property name="text">
+                <string>关闭串口</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>:/icons/disconnect.png</normaloff>:/icons/disconnect.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resetBtn">
+               <property name="text">
+                <string>重启设备</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>:/icons/reset.png</normaloff>:/icons/reset.png</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="operationTabs">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="firmwareTab">
+           <attribute name="title">
+            <string>固件烧录</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QGroupBox" name="bootloaderBox">
+              <property name="title">
+               <string>Bootloader</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="0">
+                <widget class="QLabel" name="bootFileLabel">
+                 <property name="text">
+                  <string>文件：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="bootFilePath"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="browseBoot">
+                 <property name="text">
+                  <string>浏览...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="bootAddressLabel">
+                 <property name="text">
+                  <string>地址：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="bootAddress"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="burnBootBtn">
+                 <property name="text">
+                  <string>烧录</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="appBox">
+              <property name="title">
+               <string>应用程序</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_3">
+               <item row="0" column="0">
+                <widget class="QLabel" name="appFileLabel">
+                 <property name="text">
+                  <string>文件：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="appFilePath"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="browseApp">
+                 <property name="text">
+                  <string>浏览...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="appAddressLabel">
+                 <property name="text">
+                  <string>地址：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="appAddress"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="burnAppBtn">
+                 <property name="text">
+                  <string>烧录</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="eraseBtn">
+                <property name="text">
+                 <string>擦除Flash</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/icons/erase.png</normaloff>:/icons/erase.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="burnAllBtn">
+                <property name="text">
+                 <string>一键烧录</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/icons/flash.png</normaloff>:/icons/flash.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="securityTab">
+           <attribute name="title">
+            <string>安全设置</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QGroupBox" name="keyBox">
+              <property name="title">
+               <string>Flash加密</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <widget class="QLabel" name="keyFileLabel">
+                 <property name="text">
+                  <string>密钥文件：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="keyFilePath"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="browseKeyBtn">
+                 <property name="text">
+                  <string>浏览...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="3">
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <item>
+                  <widget class="QPushButton" name="burnKeyBtn">
+                   <property name="text">
+                    <string>烧录密钥</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="burnBlockBtn">
+                   <property name="text">
+                    <string>烧录特征值</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="macBox">
+              <property name="title">
+               <string>MAC地址</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="0">
+                <widget class="QLabel" name="defaultMacLabel">
+                 <property name="text">
+                  <string>内置MAC：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="defaultMacEdit">
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="getDefaultMacBtn">
+                 <property name="text">
+                  <string>获取</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="customMacLabel">
+                 <property name="text">
+                  <string>自定义MAC：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="customMacEdit">
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="getCustomMacBtn">
+                 <property name="text">
+                  <string>获取</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="setMacLabel">
+                 <property name="text">
+                  <string>设置MAC：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="setMacEdit"/>
+               </item>
+               <item row="2" column="2">
+                <widget class="QPushButton" name="burnMacBtn">
+                 <property name="text">
+                  <string>烧录</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item row="4" column="1" colspan="2">
-      <widget class="QLabel" name="testFileLabel">
-       <property name="text">
-        <string>固件路径：</string>
+      <widget class="QGroupBox" name="outputBox">
+       <property name="title">
+        <string>输出</string>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPlainTextEdit" name="outputText">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="outputControlLayout">
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearBtn">
+            <property name="text">
+             <string>清空</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/icons/clear.png</normaloff>:/icons/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QLabel" name="portLabel">
-       <property name="text">
-        <string>端口号：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="9">
-      <widget class="QPushButton" name="Burn_APP_Btn">
-       <property name="text">
-        <string>4.烧录APP</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QPushButton" name="reloadBtn">
-       <property name="text">
-        <string>刷新</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="9">
-      <widget class="QComboBox" name="baudBox">
-       <property name="currentText">
-        <string>300</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>300</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>1200</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>2400</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>4800</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>9600</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>19200</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>38400</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>57600</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>74880</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>115200</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>230400</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>250000</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QComboBox" name="portBox"/>
-     </item>
-     <item row="5" column="2" colspan="2">
-      <widget class="QLineEdit" name="File_Path_BOOT">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="6">
-      <widget class="QLineEdit" name="testAddess_BOOT"/>
-     </item>
-     <item row="6" column="6">
-      <widget class="QLineEdit" name="testAddess_APP"/>
-     </item>
-     <item row="6" column="2" colspan="2">
-      <widget class="QLineEdit" name="File_Path_APP"/>
-     </item>
-     <item row="4" column="6">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>烧录地址：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>APP:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="fileLabel">
-       <property name="text">
-        <string>BOOTLOADER:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="5">
-      <widget class="QPushButton" name="browseBtn">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>打开BOOT</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="5">
-      <widget class="QPushButton" name="browseBinFile">
-       <property name="text">
-        <string>打开APP</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1" rowspan="2" colspan="10">
-      <widget class="QLabel" name="label_6">
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>如果没有烧录过特征值，第一次烧录固件时必须选未加密的</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="6">
-      <widget class="QLabel" name="baudrateLabel">
-       <property name="text">
-        <string>波特率：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3" colspan="4">
-      <widget class="QPushButton" name="Erase_Button">
-       <property name="text">
-        <string>1、烧录KEY前擦除全片flash</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1" colspan="8">
-      <widget class="QLabel" name="label_7">
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>如果烧录过特征值，任意时候都可以烧加密过的固件</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-    <zorder>portLabel</zorder>
-    <zorder>File_Path_APP</zorder>
-    <zorder>testFileLabel</zorder>
-    <zorder>label</zorder>
-    <zorder>label_5</zorder>
-    <zorder>reloadBtn</zorder>
-    <zorder>baudrateLabel</zorder>
-    <zorder>label_6</zorder>
-    <zorder>fileLabel</zorder>
-    <zorder>File_Path_BOOT</zorder>
-    <zorder>browseBtn</zorder>
-    <zorder>browseBinFile</zorder>
-    <zorder>testAddess_BOOT</zorder>
-    <zorder>testAddess_APP</zorder>
-    <zorder>Burn_BOOT_Btn</zorder>
-    <zorder>Burn_APP_Btn</zorder>
-    <zorder>baudBox</zorder>
-    <zorder>portBox</zorder>
-    <zorder>Erase_Button</zorder>
-    <zorder>label_7</zorder>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>211</y>
-      <width>16</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="keyBox"/>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>200</y>
-      <width>771</width>
-      <height>281</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Output</string>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QPlainTextEdit" name="outputText"/>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="ConfirmBurnAll">
-         <property name="text">
-          <string>一键烧录所有</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="RTSCheckBox">
-         <property name="text">
-          <string>重启</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="Button_reset">
-         <property name="text">
-          <string>重启</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="openSerialBtn">
-         <property name="text">
-          <string>打开串口</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="closeSerialBtn">
-         <property name="text">
-          <string>关闭串口</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="clearTextBtn">
-         <property name="text">
-          <string>清空</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="settingsBox_2">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>10</y>
-      <width>351</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>设置</string>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_4">
-     <item row="3" column="5">
-      <widget class="QPushButton" name="ButtonGetCusMac">
-       <property name="text">
-        <string>获取自定义MAC</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>自定义MAC：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="4">
-      <widget class="QLineEdit" name="GetMacBox_2"/>
-     </item>
-     <item row="2" column="4">
-      <widget class="QLineEdit" name="GetMacBox"/>
-     </item>
-     <item row="0" column="5">
-      <widget class="QPushButton" name="browseKeyFile">
-       <property name="text">
-        <string>打开key.bin</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>内置MAC：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="4">
-      <widget class="QLineEdit" name="SetMacBox"/>
-     </item>
-     <item row="4" column="5">
-      <widget class="QPushButton" name="ConfirmBurnMac">
-       <property name="text">
-        <string>确认烧录MAC地址</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="5">
-      <widget class="QPushButton" name="ButtonGetDefMac">
-       <property name="text">
-        <string>获取内置MAC</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>KEY路径：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLineEdit" name="keyBinPath"/>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="fileLabel_2">
-       <property name="text">
-        <string>设置MAC：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="5">
-      <widget class="QPushButton" name="ConfirmBurnblock">
-       <property name="text">
-        <string>3、烧录特征值</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QPushButton" name="ConfirmBurnKey">
-       <property name="text">
-        <string>2、确认烧录Flash加密Key</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>787</width>
+     <width>800</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
   <connection>
-   <sender>clearTextBtn</sender>
+   <sender>clearBtn</sender>
    <signal>clicked()</signal>
    <receiver>outputText</receiver>
    <slot>clear()</slot>
@@ -488,6 +488,22 @@
     <hint type="destinationlabel">
      <x>182</x>
      <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
     </hint>
    </hints>
   </connection>

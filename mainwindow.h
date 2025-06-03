@@ -23,17 +23,18 @@ private slots:
     void browseBootFile();
     void browseAppFile();
     void browseKeyFile();
-
-void Burn_APP();
-    void Burn_BOOT();
-    void doGetDefMac();
-     void doGetCusMac();
-    void Reset_Board();
-    void Burn_flash_Key();
-    void Burn_flash_Block();
-void Burn_All();
-    void Burn_Mac();
- void erase_flash();
+    
+    // 规范化函数命名，使用驼峰式
+    void burnApp();
+    void burnBoot();
+    void getDefaultMac();
+    void getCustomMac();
+    void resetBoard();
+    void burnFlashKey();
+    void burnFlashBlock();
+    void burnAll();
+    void burnMac();
+    void eraseFlash();
     void closeSerialPort();
     void openSerialPort();
     void readData();
@@ -45,19 +46,18 @@ private:
 
     void setInputsDisabled(bool disabled);
     void startProcess(QString program, QStringList arguments, uint8_t isTest);
-
     void handleSerialError(QSerialPort::SerialPortError error);
 
     QSerialPort *serial;
     QProcess *process;
+    
+    // 规范化变量命名，使用驼峰式
     QString filePath;
-    QString keyfilePath;
-
-    QString FilePath_APP;
-    QString FilePath_BOOT;
-    QString testAddress_APP;
-    QString testAddress_BOOT;
-
+    QString keyFilePath;
+    QString filePathApp;
+    QString filePathBoot;
+    QString addressApp;
+    QString addressBoot;
 };
 
 #endif // MAINWINDOW_H
